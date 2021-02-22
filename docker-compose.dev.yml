@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  php:
+    command: bash /usr/local/final.dev.sh
+    volumes:
+    - ${LOCAL_PROJECT_PATH}/fluentpdo:${CONTAINER_LIB_PATH}/fluentpdo:delegated
+    - ${LOCAL_PROJECT_PATH}/osseus:${CONTAINER_LIB_PATH}/osseus:delegated
+
+  nginx:
+    volumes:
+    - ${LOCAL_PROJECT_PATH}/fluentpdo:${CONTAINER_LIB_PATH}/fluentpdo:delegated
+    - ${LOCAL_PROJECT_PATH}/osseus:${CONTAINER_LIB_PATH}/osseus:delegated
+
+volumes:
+  fluentpdo:
+  osseus:

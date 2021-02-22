@@ -1,0 +1,58 @@
+version: "3"
+
+services:
+  db:
+    build:
+      context: ${LOCAL_SERVICE_PATH}/database
+    ports:
+    - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
+    networks:
+      envnw:
+        aliases:
+        - db.envms.local
+        - db.spork.local
+    volumes:
+    - dbvol:/var/lib/mysql:delegated
+    - ${LOCAL_SERVICE_PATH}/database/init:/docker-entrypoint-initdb.d:delegated
+    - ${LOCAL_SERVICE_PATH}/database/misc:/misc:delegated
+
+  php:
+    build:
+      context: ${LOCAL_SERVICE_PATH}/php
+    command: bash /usr/local/final.sh
+    ports:
+    - "9000-9001:9000-9001"
+    networks:
+      envnw:
+        aliases:
+        - php.envms.local
+        - php.spork.local
+    volumes:
+    - ${LOCAL_WEB_PATH}:${CONTAINER_WEB_PATH}:delegated
+    depends_on:
+    - db
+
+  nginx:
+    build:
+      context: ${LOCAL_SERVICE_PATH}/nginx
+    ports:
+    - "80:80"
+    networks:
+      envnw:
+        aliases:
+        - envms.local
+        - spork.local
+    volumes:
+    - ${LOCAL_WEB_PATH}:${CONTAINER_WEB_PATH}:delegated
+    depends_on:
+    - php
+
+networks:
+  envnw:
+
+volumes:
+  dbvol:
+  web:

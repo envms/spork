@@ -1,0 +1,8 @@
+{
+	"autoload": {
+		"psr-4": {
+			"Envms\\FluentPDO\\": "/var/lib/fluentpdo/src/",
+			"Envms\\Osseus\\": "/var/lib/osseus/src/"
+		}
+	}
+}
